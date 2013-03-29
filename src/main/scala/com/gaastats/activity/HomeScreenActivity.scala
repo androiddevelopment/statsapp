@@ -29,39 +29,40 @@ import android.widget.EditText
 import com.gaastats.activity.events.SetupButtonOnClickListener
 
 object HomeScreenActivity {
-  def CompetitionDialog = "competitionDialog"
-  def MatchDialog = "matchDialog"
+    def CompetitionDialog = "competitionDialog"
+    def MatchDialog = "matchDialog"
+    def TeamDialog = "teamDialog"
 }
 
 class HomeScreenActivity extends RoboFragmentActivity {
-  @Inject
-  var databaseUtils: DatabaseUtilsWrapper = null
-  @Inject
-  var resourceHelper: ResourceHelper = null
-  @Inject
-  var competitionSetupDialogFragment: CompetitionSetupDialogFragment = null
-  @Inject
-  var setupButtonOnClickListener: SetupButtonOnClickListener = null
-  var databaseHelper: DatabaseHelper = null
+    @Inject
+    var databaseUtils: DatabaseUtilsWrapper = null
+    @Inject
+    var resourceHelper: ResourceHelper = null
+    @Inject
+    var competitionSetupDialogFragment: CompetitionSetupDialogFragment = null
+    @Inject
+    var setupButtonOnClickListener: SetupButtonOnClickListener = null
+    var databaseHelper: DatabaseHelper = null
 
-  override def onCreate(savedInstanceState: Bundle) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.setup)
-    databaseHelper = databaseUtils.getDatabaseHelper
-    for (buttonID <- Array(R.id.competitionSetupButton, R.id.matchSetupButton)) findViewById(buttonID).setOnClickListener(setupButtonOnClickListener)
-  }
-
-  override def onStart() {
-    super.onStart
-    resourceHelper.setActivity(this)
-  }
-
-  override def onDestroy() {
-    super.onDestroy()
-    if (databaseHelper != null) {
-      databaseUtils.releaseHelper()
-      databaseHelper = null;
+    override def onCreate(savedInstanceState: Bundle) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.setup)
+        databaseHelper = databaseUtils.getDatabaseHelper
+        for (buttonID <- Array(R.id.competitionSetupButton, R.id.matchSetupButton, R.id.teamSetupButton)) findViewById(buttonID).setOnClickListener(setupButtonOnClickListener)
     }
-  }
+
+    override def onStart() {
+        super.onStart
+        resourceHelper.setActivity(this)
+    }
+
+    override def onDestroy() {
+        super.onDestroy()
+        if (databaseHelper != null) {
+            databaseUtils.releaseHelper()
+            databaseHelper = null;
+        }
+    }
 
 }		

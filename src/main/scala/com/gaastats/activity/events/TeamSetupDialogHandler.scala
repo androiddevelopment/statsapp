@@ -22,7 +22,7 @@ class TeamSetupDialogHandler() {
 
   def retrieveValuesAndSave(teamNameInput: EditText) {
     val teamName = teamNameInput.getText().toString()
-    val team = new Team(teamName)
+    val team = Team(teamName)
 
     save(team)
   }

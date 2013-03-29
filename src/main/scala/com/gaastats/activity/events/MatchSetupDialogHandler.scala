@@ -30,7 +30,7 @@ class MatchSetupDialogHandler {
 	  val competition = competitionDao.retrieveByName(competitionName) 
 	  val homeTeam = teamDao.retrieveByName(homeTeamName)
 	  val awayTeam = teamDao.retrieveByName(awayTeamName)
-	  val matchCreated = new Match(competition, homeTeam, awayTeam, competition.lengthOfHalf, competition.lengthOfHalf)
+	  val matchCreated = Match(competition, homeTeam, awayTeam, competition.lengthOfHalf, competition.lengthOfHalf)
 	  
 	  save(matchCreated)
   }

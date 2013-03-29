@@ -15,18 +15,16 @@ import android.widget.EditText
 import com.gaastats.activity.events.TeamSetupDialogHandler
 
 @Singleton
-class TeamDialogFragment extends BaseSetupDialogFragment {
+class TeamSetupDialogFragment extends BaseSetupDialogFragment {
   @Inject
   var teamSetupDialogHandler: TeamSetupDialogHandler = null
 
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     val dialogView = getActivity().getLayoutInflater.inflate(R.layout.team_setup, null)
 
-    val onClickFunction = {
+    createDialog(dialogView, R.string.teamSetupDialogMessage, {
       val teamNameInput = dialogView.findViewById(R.id.teamNameInput).asInstanceOf[EditText]
       teamSetupDialogHandler.retrieveValuesAndSave(teamNameInput)
-    }
-
-    createDialog(dialogView, R.string.teamSetupDialogMessage, onClickFunction)
+    })
   }
 }

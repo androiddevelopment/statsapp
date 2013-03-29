@@ -7,7 +7,7 @@ import com.google.inject.Inject
 import scala.collection.JavaConversions._
 import java.util.ArrayList
 
-abstract class BaseDao[T] {
+abstract class BaseDao[T: ClassManifest] {
 	@Inject
 	var databaseUtils: DatabaseUtilsWrapper = null
 	
@@ -15,11 +15,11 @@ abstract class BaseDao[T] {
 	  getDao().queryForEq(propertyName, propertyValue).head
 	}
 	
-	def save(objectToSave: T) = getDao().createOrUpdate(objectToSave.asInstanceOf)
+	def save(objectToSave: T) = getDao().createOrUpdate(objectToSave)
 	
-	protected def getDao[T: ClassManifest]() : Dao[T, String] = {
+	protected def getDao() : Dao[T, String] = {
 	    val databaseHelper: DatabaseHelper = databaseUtils.getDatabaseHelper
-	    val teamDao: Dao[T, String] = databaseHelper.getDao(classManifest[T].erasure)
-    return teamDao
+	    val dao: Dao[T, String] = databaseHelper.getDao(classManifest[T].erasure)
+    return dao
   }
 }

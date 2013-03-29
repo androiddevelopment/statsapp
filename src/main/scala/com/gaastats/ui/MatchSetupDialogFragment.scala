@@ -32,14 +32,12 @@ class MatchSetupDialogFragment extends BaseSetupDialogFragment {
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     dialogView = getActivity().getLayoutInflater.inflate(R.layout.match_setup, null)
     
-    val onClickFunction = {
+    createDialog(dialogView, R.string.matchSetupDialogMessage, {
           val homeTeamNameInput = dialogView.findViewById(R.id.homeTeamSpinner).asInstanceOf[Spinner]
           val awayTeamNameInput = dialogView.findViewById(R.id.awayTeamSpinner).asInstanceOf[Spinner]
           val competitionSpinner = dialogView.findViewById(R.id.competitionSpinner).asInstanceOf[Spinner]
           matchSetupDialogHandler.retrieveValuesAndSave(homeTeamNameInput, awayTeamNameInput, competitionSpinner)
-    }
-
-    createDialog(dialogView, R.string.matchSetupDialogMessage, onClickFunction)
+    })
   }
 
   override def onStart() {

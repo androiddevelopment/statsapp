@@ -10,7 +10,7 @@ import android.content.DialogInterface
 
 abstract class BaseSetupDialogFragment extends DialogFragment{
   
-	protected def createDialog(dialogView: View, messageID: Int, onClickFunction: Unit): Dialog = {
+	protected def createDialog(dialogView: View, messageID: Int, onClickFunction: =>  Unit): Dialog = {
     val builder = new AlertDialog.Builder(getActivity())
     builder.setMessage(getString(messageID))
       .setCancelable(false)
@@ -22,7 +22,8 @@ abstract class BaseSetupDialogFragment extends DialogFragment{
       })
       .setPositiveButton(R.string.create, new OnClickListener {
         def onClick(dialog: DialogInterface, which: Int) {
-          onClickFunction        }
+          onClickFunction
+          }
       })
 
     builder.create()

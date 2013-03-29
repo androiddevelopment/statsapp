@@ -23,7 +23,7 @@ class CompetitionSetupDialogHandler() {
     val numberOfPlayers = numberOfPlayersInput.getText().toString().toInt
     val numberOfSubs = numberOfSubsInput.getText().toString().toInt
     val lengthOfHalf = lengthOfHalfInput.getText().toString().toInt
-    val competition = new Competition(competitionName, numberOfPlayers, numberOfSubs, lengthOfHalf)
+    val competition = Competition(competitionName, numberOfPlayers, numberOfSubs, lengthOfHalf)
 
     save(competition)
   }
