@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">android-scala-test</string>
+    <string name="teamName">Team Name</string>
+    <string name="competitionName">Competition Name</string>
+    <string name="numberOfPlayers">Number of Players</string>
+    <string name="numberOfSubs">Number of Subs</string>
+    <string name="lengthOfHalf">Length of Half</string>
+    <string name="competitionSetupDialogMessage">Competition Setup</string>
+    <string name="matchSetupDialogMessage">Match Setup</string>
+    <string name="teamSetupDialogMessage">Team Setup</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="homeTeam">Home Team</string>
+    <string name="awayTeam">Away Team</string>
+</resources>
