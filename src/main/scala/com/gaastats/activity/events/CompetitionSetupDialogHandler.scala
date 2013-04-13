@@ -15,8 +15,6 @@ import android.view.View
 class CompetitionSetupDialogHandler() {
   @Inject
   var competitionDao: CompetitionDao = null
-  
-  var parentView: View = null;
 
   def retrieveValuesAndSave(competitionNameInput: EditText, numberOfPlayersInput: EditText, numberOfSubsInput: EditText, lengthOfHalfInput: EditText) {
     val competitionName = competitionNameInput.getText().toString()

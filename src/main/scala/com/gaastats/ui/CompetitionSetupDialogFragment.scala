@@ -22,7 +22,7 @@ class CompetitionSetupDialogFragment extends BaseSetupDialogFragment {
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     val dialogView = getActivity().getLayoutInflater.inflate(R.layout.competition_setup, null)
 
-    createDialog(dialogView, R.string.competitionSetupDialogMessage, {
+    createDialog(dialogView, R.string.competitionSetupDialogMessage, R.string.create, {
       val competitionNameInput = dialogView.findViewById(R.id.competitionNameInput).asInstanceOf[EditText]
       val numberOfPlayersInput = dialogView.findViewById(R.id.numberOfPlayersInput).asInstanceOf[EditText]
       val numberOfSubsInput = dialogView.findViewById(R.id.numberOfSubsInput).asInstanceOf[EditText]

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:orientation="vertical">
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/currentHalf"
+            />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timer"
+        />
+    <Button
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pauseOrResumeTimer"
+        />
+    <Button
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/halfOrFullTime"
+        />
+    <include android:id="@+id/homeTeamScore" layout="@layout/team_score"/>
+    <include android:id="@+id/awayTeamScore" layout="@layout/team_score"/>    
+    <Button
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/undoLast"
+        />
+</LinearLayout>

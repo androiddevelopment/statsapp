@@ -40,8 +40,6 @@ class HomeScreenActivity extends RoboFragmentActivity {
     @Inject
     var resourceHelper: ResourceHelper = null
     @Inject
-    var competitionSetupDialogFragment: CompetitionSetupDialogFragment = null
-    @Inject
     var setupButtonOnClickListener: SetupButtonOnClickListener = null
     var databaseHelper: DatabaseHelper = null
 
@@ -52,11 +50,11 @@ class HomeScreenActivity extends RoboFragmentActivity {
         for (buttonID <- Array(R.id.competitionSetupButton, R.id.matchSetupButton, R.id.teamSetupButton)) findViewById(buttonID).setOnClickListener(setupButtonOnClickListener)
     }
 
-    override def onStart() {
-        super.onStart
+    override def onResume() {
+        super.onResume
         resourceHelper.setActivity(this)
     }
-
+    
     override def onDestroy() {
         super.onDestroy()
         if (databaseHelper != null) {

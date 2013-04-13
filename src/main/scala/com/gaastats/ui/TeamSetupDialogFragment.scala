@@ -22,7 +22,7 @@ class TeamSetupDialogFragment extends BaseSetupDialogFragment {
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     val dialogView = getActivity().getLayoutInflater.inflate(R.layout.team_setup, null)
 
-    createDialog(dialogView, R.string.teamSetupDialogMessage, {
+    createDialog(dialogView, R.string.teamSetupDialogMessage, R.string.create, {
       val teamNameInput = dialogView.findViewById(R.id.teamNameInput).asInstanceOf[EditText]
       teamSetupDialogHandler.retrieveValuesAndSave(teamNameInput)
     })

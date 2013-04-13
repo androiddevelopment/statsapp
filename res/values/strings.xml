@@ -9,8 +9,12 @@
     <string name="competitionSetupDialogMessage">Competition Setup</string>
     <string name="matchSetupDialogMessage">Match Setup</string>
     <string name="teamSetupDialogMessage">Team Setup</string>
+    <string name="matchStageDialogMessage">Are you sure you wish to proceed?</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="start">Start</string>
     <string name="homeTeam">Home Team</string>
     <string name="awayTeam">Away Team</string>
+    <string name="scoreDash">-</string>
 </resources>

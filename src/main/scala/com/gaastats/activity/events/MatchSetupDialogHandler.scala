@@ -19,9 +19,6 @@ class MatchSetupDialogHandler {
   var competitionDao: CompetitionDao = null
   @Inject
   var teamDao: TeamDao = null
-  @Inject
-  var resourceHelper: ResourceHelper = null
-  var parentView: View = null;
   
   def retrieveValuesAndSave(homeTeamSpinner: Spinner, awayTeamSpinner: Spinner, competitionSpinner: Spinner) {    
 	  val competitionName = competitionSpinner.getSelectedItem().asInstanceOf[String]
@@ -30,7 +27,7 @@ class MatchSetupDialogHandler {
 	  val competition = competitionDao.retrieveByName(competitionName) 
 	  val homeTeam = teamDao.retrieveByName(homeTeamName)
 	  val awayTeam = teamDao.retrieveByName(awayTeamName)
-	  val matchCreated = Match(competition, homeTeam, awayTeam, competition.lengthOfHalf, competition.lengthOfHalf)
+	  val matchCreated = Match(competition, homeTeam, awayTeam)
 	  
 	  save(matchCreated)
   }

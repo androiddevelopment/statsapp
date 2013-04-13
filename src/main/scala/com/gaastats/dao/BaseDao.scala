@@ -8,18 +8,18 @@ import scala.collection.JavaConversions._
 import java.util.ArrayList
 
 abstract class BaseDao[T: ClassManifest] {
-	@Inject
-	var databaseUtils: DatabaseUtilsWrapper = null
-	
-	protected def retrieveByPropertyValue(propertyName: String, propertyValue: String): T = {
-	  getDao().queryForEq(propertyName, propertyValue).head
-	}
-	
-	def save(objectToSave: T) = getDao().createOrUpdate(objectToSave)
-	
-	protected def getDao() : Dao[T, String] = {
-	    val databaseHelper: DatabaseHelper = databaseUtils.getDatabaseHelper
-	    val dao: Dao[T, String] = databaseHelper.getDao(classManifest[T].erasure)
-    return dao
-  }
+    @Inject
+    var databaseUtils: DatabaseUtilsWrapper = null
+
+    protected def retrieveByPropertyValue(propertyName: String, propertyValue: String): T = {
+        getDao().queryForEq(propertyName, propertyValue).head
+    }
+
+    def save(objectToSave: T) = getDao().createOrUpdate(objectToSave)
+
+    protected def getDao(): Dao[T, String] = {
+        val databaseHelper: DatabaseHelper = databaseUtils.getDatabaseHelper
+        val dao: Dao[T, String] = databaseHelper.getDao(classManifest[T].erasure)
+        return dao
+    }
 }
