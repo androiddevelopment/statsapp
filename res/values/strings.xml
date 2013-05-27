@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">android-scala-test</string>
     <string name="teamName">Team Name</string>
     <string name="competitionName">Competition Name</string>
@@ -14,7 +15,20 @@
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
     <string name="start">Start</string>
+    <string name="undoLast">Undo Last</string>
     <string name="homeTeam">Home Team</string>
     <string name="awayTeam">Away Team</string>
     <string name="scoreDash">-</string>
+    <string name="goal">Goal</string>
+    <string name="goalFromPlay">Goal from play</string>
+    <string name="goalFromSetPlay">Goal from free/penalty</string>
+    <string name="point">Point</string>
+    <string name="pointFromPlay">Point from play</string>
+    <string name="pointFromSetPlay">Point from free/penalty</string>
+    <string name="wide">Wide</string>
+    <string name="fortyFiveOrSixtyFive">45 or 65</string>
+    <string name="foul">Foul</string>
+    <string name="penalty">Penalty</string>
+    <string name="free">Free</string>
+
 </resources>

@@ -27,6 +27,12 @@ import android.util.Log
 import roboguice.inject.InjectView
 import android.widget.EditText
 import com.gaastats.activity.events.SetupButtonOnClickListener
+import android.content.Intent
+import android.content.Context
+import com.gaastats.domain.Match
+import com.gaastats.dao.helper.TestDataHelper
+import com.gaastats.dao.helper.StatisticHelper
+import com.gaastats.dao.helper.TestDataHelper
 
 object HomeScreenActivity {
     def CompetitionDialog = "competitionDialog"
@@ -41,6 +47,9 @@ class HomeScreenActivity extends RoboFragmentActivity {
     var resourceHelper: ResourceHelper = null
     @Inject
     var setupButtonOnClickListener: SetupButtonOnClickListener = null
+    @Inject
+    var testDataHelper: TestDataHelper = null
+    
     var databaseHelper: DatabaseHelper = null
 
     override def onCreate(savedInstanceState: Bundle) {
@@ -53,14 +62,22 @@ class HomeScreenActivity extends RoboFragmentActivity {
     override def onResume() {
         super.onResume
         resourceHelper.setActivity(this)
+        testDataHelper.saveTestData
     }
-    
+
     override def onDestroy() {
         super.onDestroy()
         if (databaseHelper != null) {
             databaseUtils.releaseHelper()
             databaseHelper = null;
         }
+    }
+
+    def startMatchCentreActivity(matchToStart: Match) = {
+        val matchCentreActivity: Intent = new Intent(this.asInstanceOf[Context], classOf[MatchCentreActivity])
+        matchCentreActivity.putExtra("matchID", matchToStart.id)
+        startActivity(matchCentreActivity)
+        finish()
     }
 
 }		

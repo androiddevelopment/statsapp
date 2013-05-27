@@ -9,7 +9,14 @@ import scala.collection.JavaConversions._
 class StatisticDao extends BaseDao[Statistic]{
 	
     def retrieveAllStatistics(statisticType: StatisticType, team: Team, matchInProgress: Match): List[Statistic] = {
-        val parameters = scala.collection.mutable.Map[String, Object]("statisticType" -> statisticType, "team" -> Team, "matchInProgress" -> matchInProgress, "isDeleted" -> Boolean)
+        // We need to use a Java map here as there are no conversions from Scala map to Java
+        val parameters = new java.util.HashMap[String, Object]()
+        val statisticTypeID: java.lang.Integer = statisticType.id
+        parameters.put("statisticType_id", statisticTypeID)
+        parameters.put("team_id", team.name)
+        val matchInProgressID: java.lang.Integer = matchInProgress.id
+        parameters.put("matchOccurred_id", matchInProgressID)
+        parameters.put("isDeleted", java.lang.Boolean.FALSE)
         getDao().queryForFieldValues(parameters).toList
     }
 }

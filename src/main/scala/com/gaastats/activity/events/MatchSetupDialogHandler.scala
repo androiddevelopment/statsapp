@@ -12,25 +12,35 @@ import com.google.inject.Singleton
 import com.gaastats.util.ResourceHelper
 import android.view.View
 import com.gaastats.dao.TeamDao
+import com.gaastats.dao.MatchDao
+import com.gaastats.activity.MatchCentreActivity
+import com.gaastats.activity.HomeScreenActivity
 
 @Singleton
 class MatchSetupDialogHandler {
-  @Inject
-  var competitionDao: CompetitionDao = null
-  @Inject
-  var teamDao: TeamDao = null
-  
-  def retrieveValuesAndSave(homeTeamSpinner: Spinner, awayTeamSpinner: Spinner, competitionSpinner: Spinner) {    
-	  val competitionName = competitionSpinner.getSelectedItem().asInstanceOf[String]
-	  val homeTeamName = homeTeamSpinner.getSelectedItem().asInstanceOf[String]
-	  val awayTeamName = awayTeamSpinner.getSelectedItem().asInstanceOf[String]
-	  val competition = competitionDao.retrieveByName(competitionName) 
-	  val homeTeam = teamDao.retrieveByName(homeTeamName)
-	  val awayTeam = teamDao.retrieveByName(awayTeamName)
-	  val matchCreated = Match(competition, homeTeam, awayTeam)
-	  
-	  save(matchCreated)
-  }
-  
-  def save(matchCreated: Match) = {}  
+    @Inject
+    var competitionDao: CompetitionDao = null
+    @Inject
+    var teamDao: TeamDao = null
+    @Inject
+    var matchDao: MatchDao = null
+    @Inject
+    var resourceHelper: ResourceHelper = null
+
+    def retrieveValuesAndSave(homeTeamSpinner: Spinner, awayTeamSpinner: Spinner, competitionSpinner: Spinner) {
+        val competitionName = competitionSpinner.getSelectedItem().asInstanceOf[String]
+        val homeTeamName = homeTeamSpinner.getSelectedItem().asInstanceOf[String]
+        val awayTeamName = awayTeamSpinner.getSelectedItem().asInstanceOf[String]
+        val competition = competitionDao.retrieveByName(competitionName)
+        val homeTeam = teamDao.retrieveByName(homeTeamName)
+        val awayTeam = teamDao.retrieveByName(awayTeamName)
+        val matchCreated = Match(competition, homeTeam, awayTeam)
+
+        save(matchCreated)
+    }
+
+    def save(matchCreated: Match) = {
+        matchDao.save(matchCreated)
+        resourceHelper.getActivity().asInstanceOf[HomeScreenActivity].startMatchCentreActivity(matchCreated)
+    }
 }

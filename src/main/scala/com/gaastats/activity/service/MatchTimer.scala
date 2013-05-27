@@ -2,14 +2,13 @@ package com.gaastats.activity.service
 
 import android.os.CountDownTimer
 import com.gaastats.domain.Match
-import com.gaastats.domain.enums.MatchStage
 import org.joda.time.DateTime
 import android.widget.TextView
 
-class MatchTimer(secondsRemaining: Int, var minutesElapsed: Int, var secondsElapsed: Int, matchService: MatchTimerService) extends CountDownTimer(secondsRemaining * 1000, 1 * 1000) {
+class MatchTimer(secondsRemaining: Int, var minutesElapsed: Int, var secondsElapsed: Int, matchTimerService: MatchTimerService) extends CountDownTimer(secondsRemaining * 1000, 1 * 1000) {
     
     override def onFinish {
-    	matchService.endHalf
+    	matchTimerService.endHalf
     }
 
     override def onTick(millisUntilFinished: Long) {
@@ -18,6 +17,7 @@ class MatchTimer(secondsRemaining: Int, var minutesElapsed: Int, var secondsElap
             secondsElapsed = 0
             minutesElapsed += 1
         }
+        matchTimerService.updateMatchTime(minutesElapsed, secondsElapsed)
         
     }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/teamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/teamGoals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/teamName"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/scoreDash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/teamName"
+        android:layout_toRightOf="@+id/teamGoals"
+        android:text="@string/scoreDash"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/teamPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/teamName"
+        android:layout_toRightOf="@+id/scoreDash"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/goalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/teamGoals"
+        android:text="@+string/goal"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/pointButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/teamGoals"
+        android:layout_toRightOf="@+id/goalButton"
+        android:text="@+string/point"
+        android:textSize="25sp" />
+
+</RelativeLayout>

@@ -8,9 +8,9 @@ import com.google.inject.Singleton
 import com.google.inject.Inject
 import com.gaastats.dao.helper.DatabaseUtilsWrapper
 import java.util.ArrayList
+import com.gaastats.domain.Match
 
 @Singleton
-class CompetitionDao extends BaseDao[Competition] with NameRetrieval[Competition] {
-  
-  def retrieveByName(name: String): Competition = retrieveByPropertyValue("name", name).head  
+class MatchDao extends BaseDao[Match] {
+    def retrieveMatchByID(matchID: Int): Match = getDao.queryForEq("id", matchID).head.asInstanceOf[Match]
 }

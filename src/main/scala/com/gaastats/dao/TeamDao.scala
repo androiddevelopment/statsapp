@@ -13,6 +13,6 @@ import com.gaastats.domain.Team
 @Singleton
 class TeamDao extends BaseDao[Team] with NameRetrieval[Team]{
       
-  def retrieveByName(name: String): Team = retrieveByPropertyValue("name", name)
+  def retrieveByName(name: String): Team = retrieveByPropertyValue("name", name).head
   
 }

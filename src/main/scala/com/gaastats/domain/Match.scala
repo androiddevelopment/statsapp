@@ -1,11 +1,15 @@
 package com.gaastats.domain
 
-import org.apache.commons.lang.builder.ToStringBuilder
-import com.j256.ormlite.field.DatabaseField
 import java.util.Date
+
+import org.apache.commons.lang.builder.ToStringBuilder
 import org.joda.time.DateTime
-import com.gaastats.domain.enums.MatchStage
+
+import com.gaastats.domain.enums.MatchStageEnum
+import com.gaastats.domain.enums.TeamType
 import com.gaastats.domain.enums.TimerStatus
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 
 object Match {
     def apply(competition: Competition, homeTeam: Team, awayTeam: Team): Match = {
@@ -14,31 +18,32 @@ object Match {
         newMatch.homeTeam = homeTeam
         newMatch.awayTeam = awayTeam
         newMatch.timeElapsed = startDate
-        newMatch.stage = MatchStage.MatchNotStarted
+        newMatch.stage = MatchStageEnum.MatchNotStarted
         newMatch.timerStatus = TimerStatus.Paused
         return newMatch
     }
     
     private def startDate: Date = {
-        def startDate = new DateTime(1, 1, 1, 0, 0, 0)
+        def startDate = new DateTime(2013, 1, 1, 0, 0, 0)
         startDate.toDate()
     }
 }
 
-class Match {
+@DatabaseTable
+class Match extends Serializable{
     @DatabaseField(foreign = true) var competition: Competition = null
     @DatabaseField(foreign = true) var homeTeam: Team = null
     @DatabaseField(foreign = true) var awayTeam: Team = null
     @DatabaseField private var timeElapsed: Date = null
     @DatabaseField var dateOfMatch: Date = new Date
-    @DatabaseField(generatedId = true, id = true) var id: Int = 0
-    var stage: MatchStage.Stage = null 
-    var timerStatus: TimerStatus.Status = null
+    @DatabaseField(generatedId = true) var id: Int = 0
+    var stage: MatchStageEnum = MatchStageEnum.MatchNotStarted
+    var timerStatus: TimerStatus.Status = TimerStatus.Paused
     
     def updateMatchTime(minutesElapsed: Int, secondsElapsed: Int) {
         var matchTime = new DateTime(timeElapsed)
-        matchTime.withMinuteOfHour(minutesElapsed)
-        matchTime.withSecondOfMinute(secondsElapsed)
+        matchTime = matchTime.withMinuteOfHour(minutesElapsed)
+        matchTime = matchTime.withSecondOfMinute(secondsElapsed)
         timeElapsed = matchTime.toDate()
     }
     
@@ -48,12 +53,12 @@ class Match {
     
     def minutesElapsed: Int = {
         var matchTime = new DateTime(timeElapsed)
-        matchTime.minuteOfHour().toString().toInt
+        matchTime.minuteOfHour().get
     }
     
     def secondsElapsed: Int = {
         var matchTime = new DateTime(timeElapsed)
-        matchTime.secondOfMinute().toString().toInt
+        matchTime.secondOfMinute().get
     }
     
     override def toString = ToStringBuilder.reflectionToString(this)

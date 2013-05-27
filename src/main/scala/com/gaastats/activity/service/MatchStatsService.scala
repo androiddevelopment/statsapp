@@ -14,52 +14,58 @@ import com.gaastats.util.ResourceHelper
 import com.gaastats.activity.MatchCentreActivity
 import com.gaastats.dao.StatisticTypeDao
 import scala.collection.JavaConversions._
+import com.gaastats.dao.MatchDao
+import com.gaastats.util.Format
 
 @Singleton
 class MatchStatsService {
-    var matchInProgress: Match = null
+    @Inject
     var statisticDao: StatisticDao = null
+    @Inject
     var statisticTypeDao: StatisticTypeDao = null
-    var undoStack: Stack[Statistic] = Stack()
     @Inject
     var resourceHelper: ResourceHelper = null
-    
-    def createNewStatistic(statisticType: StatisticType, teamType: TeamType.Type) {
-        var statistic = Statistic(matchInProgress, homeOrAwayTeam(teamType), matchInProgress.matchTime, statisticType)        
+    private var matchInProgress: Match = null
+    var undoStack: Stack[Statistic] = Stack()
+
+    def setMatchInProgress(matchInProgress: Match) {
+        this.matchInProgress = matchInProgress
+    }
+
+    def createNewStatistic(statisticType: StatisticType, teamType: TeamType) {
+        var statistic = Statistic(matchInProgress, teamType.getTeam(matchInProgress), matchInProgress.matchTime, statisticType)
         undoStack.push(statistic)
+        saveAndUpdateViews(statistic, teamType)
     }
 
     def undoLast() {
-        var lastStatistic = undoStack.pop
-        lastStatistic.markDeleted        
-    }
-    
-    def retrieveStatisticSum(statisticType: StatisticType, teamType: TeamType.Type): Int = {
-        val statistic = statisticTypeDao.retrieveByName(statisticType.name)
-        val childStatistics = statistic.childNames
-        var statisticsSize = 0
-        if(childStatistics == Nil) {
-            statisticsSize += retrieveSum(statistic, homeOrAwayTeam(teamType))
-        } else {
-            for(childStatistic <- childStatistics)  statisticsSize += retrieveSum(childStatistic, homeOrAwayTeam(teamType))
+        if (!undoStack.isEmpty) {
+            var lastStatistic = undoStack.pop
+            lastStatistic.markDeleted
+            for (teamType <- TeamType.allTypes) saveAndUpdateViews(lastStatistic, teamType)
         }
-        statisticsSize
     }
-    
+
+    def retrieveStatisticSum(statisticName: String, teamType: TeamType): String = {
+        val statistic = statisticTypeDao.retrieveStatisticTypeHierarchy(statisticName)
+        val childStatistics = statistic.childStatistics
+        var statisticsSize = 0
+        if (childStatistics == Nil) {
+            statisticsSize += retrieveSum(statistic, teamType.getTeam(matchInProgress))
+        } else {
+            for (childStatistic <- childStatistics) statisticsSize += retrieveSum(childStatistic, teamType.getTeam(matchInProgress))
+        }
+        Format.formatInteger(statisticsSize)
+    }
+
     private def retrieveSum(statisticType: StatisticType, team: Team): Int = {
-        var statistics: List[Statistic]  = statisticDao.retrieveAllStatistics(statisticType, team, matchInProgress)
+        var statistics: List[Statistic] = statisticDao.retrieveAllStatistics(statisticType, team, matchInProgress)
         statistics.size
     }
-    
-    private def saveAndUpdateViews(statistic: Statistic, teamType: TeamType.Type) {
+
+    private def saveAndUpdateViews(statistic: Statistic, teamType: TeamType) {
         statisticDao.save(statistic)
-        resourceHelper.getActivity().asInstanceOf[MatchCentreActivity].refreshTeamScoreViews(teamType)
+        resourceHelper.getActivity().asInstanceOf[MatchCentreActivity].refreshTeamStatisticViews(teamType)
     }
-    
-    private def homeOrAwayTeam(teamType: TeamType.Type): Team = {
-        teamType match {
-            case TeamType.Home => matchInProgress.homeTeam
-            case TeamType.Away => matchInProgress.awayTeam
-        }
-    }
+
 }

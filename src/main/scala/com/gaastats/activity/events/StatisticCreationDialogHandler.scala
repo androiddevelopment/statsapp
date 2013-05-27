@@ -12,8 +12,8 @@ class StatisticCreationDialogHandler {
 	@Inject
 	var matchStatsService: MatchStatsService = null
 	
-	def createStatistic(statisticName: String, statisticTypeIndex: Int, teamType: TeamType.Type) {
-	    var parentStatisticType = statisticTypeDao.retrieveByName(statisticName)
+	def createStatistic(statisticName: String, statisticTypeIndex: Int, teamType: TeamType) {
+	    var parentStatisticType = statisticTypeDao.retrieveStatisticTypeHierarchy(statisticName)
 	    var statisticType = parentStatisticType.typeAtIndex(statisticTypeIndex)
 	    matchStatsService.createNewStatistic(statisticType, teamType)
 	}

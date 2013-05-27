@@ -18,8 +18,6 @@ class TeamSetupDialogHandler() {
   @Inject
   var teamDao: TeamDao = null
   
-  var parentView: View = null;
-
   def retrieveValuesAndSave(teamNameInput: EditText) {
     val teamName = teamNameInput.getText().toString()
     val team = Team(teamName)
