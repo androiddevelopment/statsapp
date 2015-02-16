@@ -22,4 +22,10 @@
         android:id="@+id/teamSetupButton"
         android:text="@string/teamSetupDialogMessage"
         />
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/viewMatchesButton"
+            android:text="@string/viewMatchButton"
+            />
 </LinearLayout>

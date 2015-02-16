@@ -17,5 +17,5 @@ object Team{
 class Team() {
     @DatabaseField(id = true) var name: String = null
 
-    override def toString = ToStringBuilder.reflectionToString(this)
+    override def toString = name
 }

@@ -12,6 +12,7 @@
       </intent-filter>
     </activity>
     <activity android:name="com.gaastats.activity.MatchCentreActivity"/>
+    <activity android:name="com.gaastats.activity.MatchListActivity"/>
   </application>
 
 </manifest>

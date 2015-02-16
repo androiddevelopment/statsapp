@@ -4,7 +4,6 @@ import com.gaastats.domain.StatisticType
 import scala.collection.JavaConversions._
 import com.gaastats.dao.helper.DatabaseUtilsWrapper
 import com.google.inject.Inject
-import com.gaastats.dao.helper.DatabaseQueryTrait
 import scala.collection.mutable.ListBuffer
 
 class StatisticTypeDao extends BaseDao[StatisticType] {

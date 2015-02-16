@@ -1,9 +1,6 @@
 package com.gaastats.activity.service
 
 import android.os.CountDownTimer
-import com.gaastats.domain.Match
-import org.joda.time.DateTime
-import android.widget.TextView
 
 class MatchTimer(secondsRemaining: Int, var minutesElapsed: Int, var secondsElapsed: Int, matchTimerService: MatchTimerService) extends CountDownTimer(secondsRemaining * 1000, 1 * 1000) {
     

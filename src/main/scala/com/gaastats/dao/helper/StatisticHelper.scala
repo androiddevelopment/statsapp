@@ -13,17 +13,29 @@ object StatisticHelper {
     val defaultStatistics: scala.collection.mutable.Map[StatisticType, Int] = LinkedHashMap()
     private val goalFromPlay = createStatisticType("Goal from play", Nil, 0)
     private val goalFromSetPlay = createStatisticType("Goal from penalty/free", Nil, 0)
-    private val goal = createStatisticType("Goal", List(goalFromPlay, goalFromSetPlay), R.id.teamGoals)
+    createStatisticType("Goal", List(goalFromPlay, goalFromSetPlay), R.id.teamGoals)
     private val pointFromPlay = createStatisticType("Point from play", Nil, 0)
     private val pointFromSetPlay = createStatisticType("Point from penalty/free", Nil, 0)
-    private val point = createStatisticType("Point", List(pointFromPlay, pointFromSetPlay), R.id.teamPoints)
+    createStatisticType("Point", List(pointFromPlay, pointFromSetPlay), R.id.teamPoints)
     private val wide = createStatisticType("Wide", Nil, 0)
-    createStatisticType("Wide", List(wide), 0)
+    private val save = createStatisticType("Save", Nil, 0)
+    private val post = createStatisticType("Post", Nil, 0)
+    createStatisticType("Miss", List(wide, save, post), R.id.teamMisses)
     private val fortyFiveOrSixtyFive = createStatisticType("Forty five or sixty five", Nil, 0)
     private val foul = createStatisticType("Foul", Nil, 0)
     private val penalty = createStatisticType("Penalty", Nil, 0)
-    private val free = createStatisticType("Free", List(foul, penalty, fortyFiveOrSixtyFive), 0)
-
+    createStatisticType("Free", List(foul, penalty, fortyFiveOrSixtyFive), 0)
+    private val yellowCard = createStatisticType("Yellow Card", Nil, R.id.teamYellowCards)
+    private val redCard = createStatisticType("Red Card", Nil, R.id.teamRedCards)
+    private val blackCard = createStatisticType("Black Card", Nil, R.id.teamBlackCards)
+    createStatisticType("Card", List(redCard, yellowCard, blackCard), 0)
+    private val kickoutWonClean = createStatisticType("Kickout won clean", Nil, 0)
+    private val kickoutWonOnBreak = createStatisticType("Kickout won on break", Nil, 0)
+    private val homeKickout = createStatisticType("Home kickout", List(kickoutWonClean, kickoutWonOnBreak, foul), 0)
+    private val awayKickout = createStatisticType("Away kickout", List(kickoutWonClean, kickoutWonOnBreak, foul), 0)
+    createStatisticType("Kickout",  List(homeKickout, awayKickout), R.id.teamKickouts)
+    
+    
     def getStatisticType(statisticName: String): StatisticType = {
         defaultStatistics.keys.filter(key => key.name.equals(statisticName)).head
     }

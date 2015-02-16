@@ -9,21 +9,20 @@ import com.gaastats.util.ResourceHelper
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Singleton
-
 import android.app.DialogFragment
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import com.gaastats.ui.helper.DialogFragmentHelper
+import com.gaastats.ui.StatisticLauncherDialogFragment
 
 class MatchButtonOnClickListener extends OnClickListener {
     @Inject
     var matchTimerService: MatchTimerService = null
     @Inject
-    var resourceHelper: ResourceHelper = null
-    @Inject
     var matchStatsService: MatchStatsService = null
     @Inject
-    var injector: Injector = null
+    var dialogFragmentHelper: DialogFragmentHelper = null
     
 
     def onClick(view: View) {
@@ -31,16 +30,14 @@ class MatchButtonOnClickListener extends OnClickListener {
         view.getId() match {
             case R.id.halfOrFullTime => matchTimerService.updateMatchStage
             case R.id.pauseOrResumeTimer => matchTimerService.pauseResumeMatch
-            case R.id.goalButton => showFragment(new BaseStatisticTypeDialogFragment("Goal"), MatchCentreActivity.GoalDialog, parentViewID)
-            case R.id.pointButton => showFragment(new BaseStatisticTypeDialogFragment("Point"), MatchCentreActivity.PointDialog, parentViewID)
+            case R.id.goalButton => dialogFragmentHelper.showFragment(new StatisticLauncherDialogFragment(matchStatsService.matchInProgress, "Goal"), MatchCentreActivity.GoalDialog)
+            case R.id.pointButton => dialogFragmentHelper.showFragment(new StatisticLauncherDialogFragment(matchStatsService.matchInProgress, "Point"), MatchCentreActivity.PointDialog)
+            case R.id.missButton => dialogFragmentHelper.showFragment(new StatisticLauncherDialogFragment(matchStatsService.matchInProgress, "Miss"), MatchCentreActivity.StatisticLauncherDialog)
+            case R.id.cardButton => dialogFragmentHelper.showFragment(new StatisticLauncherDialogFragment(matchStatsService.matchInProgress, "Card"), MatchCentreActivity.StatisticLauncherDialog)
+            case R.id.kickoutButton => dialogFragmentHelper.showFragment(new StatisticLauncherDialogFragment(matchStatsService.matchInProgress, "Kickout"), MatchCentreActivity.StatisticLauncherDialog)
             case R.id.undoLast => matchStatsService.undoLast
         }
 
-        def showFragment(fragment: DialogFragment, fragmentName: String, parentViewID: Int) {
-            injector.injectMembers(fragment)
-            fragment.setArguments(new Bundle)
-            fragment.getArguments.putInt("parentViewID", parentViewID)
-            fragment.show(resourceHelper.getFragmentManager(), fragmentName)
-        }
+        
     }
 }

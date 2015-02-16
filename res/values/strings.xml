@@ -10,6 +10,7 @@
     <string name="competitionSetupDialogMessage">Competition Setup</string>
     <string name="matchSetupDialogMessage">Match Setup</string>
     <string name="teamSetupDialogMessage">Team Setup</string>
+    <string name="viewMatchButton">View Existing Matches</string>
     <string name="matchStageDialogMessage">Are you sure you wish to proceed?</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -25,10 +26,20 @@
     <string name="point">Point</string>
     <string name="pointFromPlay">Point from play</string>
     <string name="pointFromSetPlay">Point from free/penalty</string>
-    <string name="wide">Wide</string>
+    <string name="miss">Miss</string>
+    <string name="card">Card</string>
+    <string name="kickout">Kickout</string>
     <string name="fortyFiveOrSixtyFive">45 or 65</string>
     <string name="foul">Foul</string>
     <string name="penalty">Penalty</string>
     <string name="free">Free</string>
+    <string name="score">Score</string>
+    <string name="misses">Misses</string>
+    <string name="kickoutsWon">Kickouts Won</string>
+    <string name="yellowCards">Yellow Cards</string>
+    <string name="redCards">Red Cards</string>
+    <string name="viewIndividualMatchButton">View</string>
+    <string name="deleteIndividualMatchButton">Delete</string>
+    <string name="blackCards">Black Cards</string>
 
 </resources>

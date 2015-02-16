@@ -18,13 +18,11 @@ object TeamType {
     case object Home extends TeamType(R.id.homeTeamScore)
     case object Away extends TeamType(R.id.awayTeamScore)
     
-    def allTypes = List(Home, Away)
+    private def allTypes = List(Home, Away)
     
     def getTypeForLayoutID(layoutID: Int) = {
-        var typeForLayoutID: TeamType = null
-        for(teamType <- allTypes) {
-            if(teamType.layoutID.equals(layoutID)) typeForLayoutID = teamType            
-        }
-        typeForLayoutID
+        allTypes.find(teamType => teamType.layoutID.equals(layoutID)).get
     }
+    
+    def forAllTeamTypes(performTeamTypeAction: TeamType =>  Unit) =  allTypes.foreach(teamType => performTeamTypeAction(teamType))
 }

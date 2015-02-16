@@ -56,20 +56,29 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:weightSum="1.0" >
-
+		
+        <include 
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            layout="@layout/statistics_labels"/>
+        
         <include
             android:id="@+id/homeTeamScore"
+            android:layout_weight="0.3"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_marginRight="20dp"
             layout="@layout/team_statistics" />
-
+        
         <include
             android:id="@+id/awayTeamScore"
+            android:layout_weight="0.3"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             layout="@layout/team_statistics" />
     </LinearLayout>
-
+    
+	<include
+            android:id="@+id/statisticsButtons"
+            layout="@layout/statistics_buttons" />
     <Button
         android:id="@+id/undoLast"
         android:layout_width="fill_parent"

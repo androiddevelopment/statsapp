@@ -27,6 +27,7 @@ class SetupButtonOnClickListener extends OnClickListener {
 	    case R.id.competitionSetupButton => competitionSetupDialogFragment.show(resourceHelper.getFragmentManager(), HomeScreenActivity.CompetitionDialog)
 	    case R.id.matchSetupButton => matchSetupDialogFragment.show(resourceHelper.getFragmentManager(), HomeScreenActivity.MatchDialog)
 	    case R.id.teamSetupButton => teamSetupDialogFragment.show(resourceHelper.getFragmentManager(), HomeScreenActivity.TeamDialog)
+      case R.id.viewMatchesButton => resourceHelper.getActivity.asInstanceOf[HomeScreenActivity].startMatchListViewActivity()
 	  }
   }
 

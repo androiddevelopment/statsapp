@@ -25,24 +25,20 @@ class MatchStatsService {
     var statisticTypeDao: StatisticTypeDao = null
     @Inject
     var resourceHelper: ResourceHelper = null
-    private var matchInProgress: Match = null
+    var matchInProgress: Match = null
     var undoStack: Stack[Statistic] = Stack()
-
-    def setMatchInProgress(matchInProgress: Match) {
-        this.matchInProgress = matchInProgress
-    }
 
     def createNewStatistic(statisticType: StatisticType, teamType: TeamType) {
         var statistic = Statistic(matchInProgress, teamType.getTeam(matchInProgress), matchInProgress.matchTime, statisticType)
         undoStack.push(statistic)
-        saveAndUpdateViews(statistic, teamType)
+        saveAndUpdateViews(statistic)(teamType)
     }
 
     def undoLast() {
         if (!undoStack.isEmpty) {
             var lastStatistic = undoStack.pop
             lastStatistic.markDeleted
-            for (teamType <- TeamType.allTypes) saveAndUpdateViews(lastStatistic, teamType)
+            TeamType.forAllTeamTypes(saveAndUpdateViews(lastStatistic)_)
         }
     }
 
@@ -63,9 +59,11 @@ class MatchStatsService {
         statistics.size
     }
 
-    private def saveAndUpdateViews(statistic: Statistic, teamType: TeamType) {
+    private def saveAndUpdateViews(statistic: Statistic)( teamType: TeamType) {
         statisticDao.save(statistic)
-        resourceHelper.getActivity().asInstanceOf[MatchCentreActivity].refreshTeamStatisticViews(teamType)
+        refreshViews(teamType)
     }
-
+    
+    private def refreshViews(teamType: TeamType) = resourceHelper.getActivity().asInstanceOf[MatchCentreActivity].refreshTeamStatisticViews(teamType)
+    
 }

@@ -52,13 +52,25 @@ class Match extends Serializable{
     }
     
     def minutesElapsed: Int = {
-        var matchTime = new DateTime(timeElapsed)
+        val matchTime = new DateTime(timeElapsed)
         matchTime.minuteOfHour().get
     }
     
     def secondsElapsed: Int = {
-        var matchTime = new DateTime(timeElapsed)
+        val matchTime = new DateTime(timeElapsed)
         matchTime.secondOfMinute().get
+    }
+    
+     def getTeamNames = {
+        Array[CharSequence](homeTeam.name, awayTeam.name)
+    }
+    
+    def getTeamTypeForTeamName(name: String): TeamType = {
+      val HomeTeam = homeTeam.name
+        name match {
+          case HomeTeam => TeamType.Home
+          case _ => TeamType.Away
+        }
     }
     
     override def toString = ToStringBuilder.reflectionToString(this)

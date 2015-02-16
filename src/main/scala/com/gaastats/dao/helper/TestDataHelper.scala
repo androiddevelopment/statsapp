@@ -23,7 +23,7 @@ class TestDataHelper {
         teamDao.save(teamCork)
         val teamTones = Team("Wolfe Tones")
         teamDao.save(teamTones)
-        val competition = Competition("OBrien Cup", 13, 5, 20)
+        val competition = Competition("O Brien Cup", 13, 5, 20)
         competitionDao.save(competition)
     }
 }

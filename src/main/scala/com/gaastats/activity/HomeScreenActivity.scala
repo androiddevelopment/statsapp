@@ -1,38 +1,14 @@
 package com.gaastats.activity
 
-import android.app.Activity
-import android.app.AlertDialog
+import android.content.{Context, Intent}
 import android.os.Bundle
 import com.gaastats.R
-import android.widget.Button
-import android.content.DialogInterface.OnClickListener
-import android.content.DialogInterface
-import android.app.Dialog
-import com.gaastats.activity.events.CompetitionSetupDialogHandler
-import android.view.ViewGroup
-import com.gaastats.activity.events.MatchSetupDialogHandler
-import com.gaastats.dao.helper.DatabaseUtilsWrapper
-import com.j256.ormlite.android.apptools.OpenHelperManager
-import com.gaastats.dao.helper.DatabaseHelper
-import roboguice.activity.RoboActivity
-import com.google.inject.Inject
-import com.gaastats.util.ResourceHelper
-import com.gaastats.ui.CompetitionSetupDialogFragment
-import android.util.Log
-import roboguice.activity.RoboFragmentActivity
-import android.util.Log
-import android.util.Log
-import android.util.Log
-import android.util.Log
-import roboguice.inject.InjectView
-import android.widget.EditText
 import com.gaastats.activity.events.SetupButtonOnClickListener
-import android.content.Intent
-import android.content.Context
+import com.gaastats.dao.helper.{DatabaseHelper, DatabaseUtilsWrapper, TestDataHelper}
 import com.gaastats.domain.Match
-import com.gaastats.dao.helper.TestDataHelper
-import com.gaastats.dao.helper.StatisticHelper
-import com.gaastats.dao.helper.TestDataHelper
+import com.gaastats.util.ResourceHelper
+import com.google.inject.Inject
+import roboguice.activity.RoboFragmentActivity
 
 object HomeScreenActivity {
     def CompetitionDialog = "competitionDialog"
@@ -56,7 +32,7 @@ class HomeScreenActivity extends RoboFragmentActivity {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.setup)
         databaseHelper = databaseUtils.getDatabaseHelper
-        for (buttonID <- Array(R.id.competitionSetupButton, R.id.matchSetupButton, R.id.teamSetupButton)) findViewById(buttonID).setOnClickListener(setupButtonOnClickListener)
+        List(R.id.competitionSetupButton, R.id.matchSetupButton, R.id.teamSetupButton, R.id.viewMatchesButton).foreach(buttonID => findViewById(buttonID).setOnClickListener(setupButtonOnClickListener))
     }
 
     override def onResume() {
@@ -74,10 +50,14 @@ class HomeScreenActivity extends RoboFragmentActivity {
     }
 
     def startMatchCentreActivity(matchToStart: Match) = {
-        val matchCentreActivity: Intent = new Intent(this.asInstanceOf[Context], classOf[MatchCentreActivity])
+        val matchCentreActivity = new Intent(this.asInstanceOf[Context], classOf[MatchCentreActivity])
         matchCentreActivity.putExtra("matchID", matchToStart.id)
         startActivity(matchCentreActivity)
-        finish()
+    }
+
+    def startMatchListViewActivity() = {
+      val matchListViewActivity = new Intent(this.asInstanceOf[Context], classOf[MatchListActivity])
+      startActivity(matchListViewActivity)
     }
 
 }		

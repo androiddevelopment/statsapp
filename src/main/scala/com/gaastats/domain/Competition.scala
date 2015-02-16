@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable
 
 object Competition {
     def apply(name: String, numberOfPlayers: Int, numberOfSubs: Int, lengthOfHalf: Int): Competition = {
-        var competition = new Competition()
+        val competition = new Competition()
         competition.name = name
         competition.numberOfPlayers = numberOfPlayers
         competition.numberOfSubs = numberOfSubs
@@ -23,5 +23,5 @@ class Competition {
     @DatabaseField var lengthOfHalf: java.lang.Integer = 0
 
     
-    override def toString = ToStringBuilder.reflectionToString(this)
+    override def toString = name
 }

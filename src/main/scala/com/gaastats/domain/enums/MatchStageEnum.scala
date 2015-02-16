@@ -2,7 +2,7 @@ package com.gaastats.domain.enums
 
 import android.view.View
 
-abstract class MatchStageEnum(val matchStageInt: Int, val halfOrFullTimeButtonText: String, val currentHalfLabelText: String, val next: MatchStageEnum, val product: Int, val pauseOrResumeTimerVisibility: Int, val halfOrFullTimeButtonVisibility: Int) 
+abstract class MatchStageEnum(val matchStageInt: Int, val halfOrFullTimeButtonText: String, val currentHalfLabelText: String, val next: MatchStageEnum, val product: Int, val viewVisibility: Int, val halfOrFullTimeButtonVisibility: Int) 
 
 object MatchStageEnum {
 	case object MatchNotStarted extends MatchStageEnum(0, "Start Match", "Match Not Started", FirstHalfInProgress, 0, View.INVISIBLE, View.VISIBLE)

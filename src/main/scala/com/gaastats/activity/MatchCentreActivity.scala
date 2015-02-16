@@ -21,6 +21,8 @@ import android.util.Log
 object MatchCentreActivity {
     def GoalDialog = "goalDialog"
     def PointDialog = "pointDialog"
+    def StatisticLauncherDialog = "statisticLauncherDialog"
+    def matchStatisticViews = List(R.id.goalButton, R.id.pointButton, R.id.missButton, R.id.cardButton, R.id.kickoutButton)
 }
 
 class MatchCentreActivity extends RoboFragmentActivity {
@@ -45,60 +47,66 @@ class MatchCentreActivity extends RoboFragmentActivity {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.match_centre)
         for (buttonID <- Array(R.id.pauseOrResumeTimer, R.id.halfOrFullTime, R.id.undoLast)) findViewById(buttonID).setOnClickListener(matchButtonOnClickListener)
-        setOnClickListenersForStatisticButtons(List(R.id.goalButton, R.id.pointButton))
+        setOnClickListenersForStatisticButtons(MatchCentreActivity.matchStatisticViews)
         matchID = getIntent().getSerializableExtra("matchID").asInstanceOf[Int]
-
     }
 
     override def onStart {
         super.onStart
-        matchInProgress = matchDao.retrieveMatchByID(matchID)
-        matchStatsService.setMatchInProgress(matchInProgress)
-        matchTimerService.setMatchInProgress(matchInProgress)
-        resourceHelper.setActivity(this)
-        matchTimerService.initializeViews
+        if (matchInProgress == null) {
+            matchInProgress = matchDao.retrieveMatchByID(matchID)
+            matchStatsService.matchInProgress = matchInProgress
+            matchTimerService.setMatchInProgress(matchInProgress)
+        }
         setTitleTextViews
-        statisticHelper.saveStatistics        
+        statisticHelper.saveStatistics
     }
-    
+
     override def onResume {
         super.onResume
-        for (teamType <- TeamType.allTypes) refreshTeamStatisticViews(teamType)
+        resourceHelper.setActivity(this)
+        matchTimerService.initializeViews
+        TeamType forAllTeamTypes refreshTeamStatisticViews
     }
-    
-    override def onPause {
-        super.onPause
-        matchDao.save(matchInProgress)
+
+    override def onDestroy {
+      super.onDestroy
+      matchTimerService.pauseResumeMatch
+      matchDao.save(matchInProgress)
+
     }
-    
+
     def refreshTeamStatisticViews(teamType: TeamType) {
         updateStatisticTextView(teamType, "Goal")
         updateStatisticTextView(teamType, "Point")
+        updateStatisticTextView(teamType, "Miss")
+        updateStatisticTextView(teamType, "Kickout")
+        updateStatisticTextView(teamType, "Yellow Card")
+        updateStatisticTextView(teamType, "Red Card")
+        updateStatisticTextView(teamType, "Black Card")
     }
 
     def updateStatisticTextView(teamType: TeamType, statisticName: String) {
         var teamScoreLayout = teamType.layoutID
         val teamScoreLayoutView = findViewById(teamScoreLayout)
         val statisticViewID = StatisticHelper.getStatisticView(statisticName)
-        val statisticTextView = teamScoreLayoutView.findViewById(statisticViewID).asInstanceOf[TextView]
+        var statisticTextView = teamScoreLayoutView.findViewById(statisticViewID).asInstanceOf[TextView]
         statisticTextView.setText(matchStatsService.retrieveStatisticSum(statisticName, teamType).toString)
     }
 
     private def setTitleTextViews {
         val matchCentreTitle = matchInProgress.competition.name + ": " + matchInProgress.homeTeam.name + " v " + matchInProgress.awayTeam.name
         findViewById(R.id.matchCentreTitle).asInstanceOf[TextView].setText(matchCentreTitle)
-        for (teamType <- TeamType.allTypes) {
-            var teamNameView = findViewById(teamType.layoutID).findViewById(R.id.teamName).asInstanceOf[TextView]
-            teamNameView.setText(teamType.getTeam(matchInProgress).name)
-        }
+        TeamType.forAllTeamTypes(setTextForTeam)
     }
-    
+
     private def setOnClickListenersForStatisticButtons(buttonIDsList: List[Int]) {
-        for(buttonID <- buttonIDsList) {
-            for (teamType <- TeamType.allTypes) {
-                findViewById(teamType.layoutID).findViewById(buttonID).setOnClickListener(matchButtonOnClickListener)
-            }
-        }
+        buttonIDsList.foreach(buttonID => findViewById(R.id.statisticsButtons).findViewById(buttonID).setOnClickListener(matchButtonOnClickListener))
+    }
+
+    private def setTextForTeam(teamType: TeamType) {
+        var teamNameView = findViewById(teamType.layoutID).findViewById(R.id.teamName).asInstanceOf[TextView]
+        teamNameView.setText(teamType.getTeam(matchInProgress).name)
     }
 
 }
