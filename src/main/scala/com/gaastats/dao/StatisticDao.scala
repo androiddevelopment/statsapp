@@ -6,7 +6,7 @@ import com.gaastats.domain.StatisticType
 import com.gaastats.domain.Match
 import scala.collection.JavaConversions._
 
-class StatisticDao extends BaseDao[Statistic]{
+object StatisticDao extends BaseDao[Statistic]{
 	
     def retrieveAllStatistics(statisticType: StatisticType, team: Team, matchInProgress: Match): List[Statistic] = {
         // We need to use a Java map here as there are no conversions from Scala map to Java

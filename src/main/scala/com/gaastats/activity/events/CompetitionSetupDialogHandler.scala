@@ -1,20 +1,11 @@
 package com.gaastats.activity.events
 
-import android.view.ViewGroup
-import android.widget.TextView
-import com.gaastats.R
-import com.gaastats.domain.Competition
 import android.widget.EditText
-import com.google.inject.Inject
 import com.gaastats.dao.CompetitionDao
-import com.google.inject.Singleton
-import com.gaastats.util.ResourceHelper
-import android.view.View
+import com.gaastats.domain.Competition
 
-@Singleton
-class CompetitionSetupDialogHandler() {
-  @Inject
-  var competitionDao: CompetitionDao = null
+
+object CompetitionSetupDialogHandler {
 
   def retrieveValuesAndSave(competitionNameInput: EditText, numberOfPlayersInput: EditText, numberOfSubsInput: EditText, lengthOfHalfInput: EditText) {
     val competitionName = competitionNameInput.getText().toString()
@@ -26,5 +17,5 @@ class CompetitionSetupDialogHandler() {
     save(competition)
   }
   
-  def save(competition: Competition) = competitionDao.save(competition)
+  def save(competition: Competition) = CompetitionDao.save(competition)
 }

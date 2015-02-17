@@ -1,12 +1,10 @@
 package com.gaastats.dao.helper
 
+import android.util.Log
 import com.gaastats.R
 import com.gaastats.dao.StatisticTypeDao
 import com.gaastats.domain.StatisticType
-import com.google.inject.Inject
-import com.j256.ormlite.table.DatabaseTable
-import com.google.inject.Singleton
-import android.util.Log
+
 import scala.collection.mutable.LinkedHashMap
 
 object StatisticHelper {
@@ -57,18 +55,14 @@ object StatisticHelper {
         }
         statisticType // We are only interested in the returned object if there is one element in the list
     }
-}
 
-class StatisticHelper {
-    @Inject
-    var statisticTypeDao: StatisticTypeDao = null
-
-    def saveStatistics {
-        if (!statisticTypeDao.statisticsAreLoaded) {
-            for (statisticType <- StatisticHelper.defaultStatistics.keys) {
-                Log.v(this.getClass().toString(), "Saving statistic type " + statisticType)
-                statisticTypeDao.save(statisticType)
-            }
-        }
+  def saveStatistics {
+    if (!StatisticTypeDao.statisticsAreLoaded) {
+      for (statisticType <- StatisticHelper.defaultStatistics.keys) {
+        Log.v(this.getClass().toString(), "Saving statistic type " + statisticType)
+        StatisticTypeDao.save(statisticType)
+      }
     }
+  }
 }
+

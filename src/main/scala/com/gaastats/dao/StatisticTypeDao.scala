@@ -1,14 +1,11 @@
 package com.gaastats.dao
 
+import com.gaastats.dao.helper.DatabaseUtils
 import com.gaastats.domain.StatisticType
-import scala.collection.JavaConversions._
-import com.gaastats.dao.helper.DatabaseUtilsWrapper
-import com.google.inject.Inject
+
 import scala.collection.mutable.ListBuffer
 
-class StatisticTypeDao extends BaseDao[StatisticType] {
-    @Inject
-    val databaseUtilsWrapper: DatabaseUtilsWrapper = null
+object StatisticTypeDao extends BaseDao[StatisticType] {
     val statisticTypeQueryByName = "SELECT * FROM STATISTICTYPE st WHERE st.name = ?"
     val statisticTypeQueryByID = "SELECT * FROM STATISTICTYPE st WHERE st.id = ?"
 
@@ -18,7 +15,7 @@ class StatisticTypeDao extends BaseDao[StatisticType] {
     }
         
     def retrieveStatisticTypeHierarchy(name: String): StatisticType = {
-        val statisticTypeResultSet = databaseUtilsWrapper.getDatabaseHelper().executeQuery(statisticTypeQueryByName, List(name))
+        val statisticTypeResultSet = DatabaseUtils.getDatabaseHelper().executeQuery(statisticTypeQueryByName, List(name))
 
         createHierarchy(statisticTypeResultSet)
     }
@@ -30,7 +27,7 @@ class StatisticTypeDao extends BaseDao[StatisticType] {
         for (statisticTypeRow <- statisticTypeResultSet) {
             val childStatisticID = statisticTypeRow("childStatistic_id").asInstanceOf[String]
             if (childStatisticID != null) {
-                val childStatisticResultSet = databaseUtilsWrapper.getDatabaseHelper().executeQuery(statisticTypeQueryByID, List(childStatisticID))
+                val childStatisticResultSet = DatabaseUtils.getDatabaseHelper().executeQuery(statisticTypeQueryByID, List(childStatisticID))
                 val childStatistic = createHierarchy(childStatisticResultSet)
                 childStatistics += childStatistic
             }

@@ -1,23 +1,12 @@
 package com.gaastats.ui
 
-import com.gaastats.activity.events.CompetitionSetupDialogHandler
-import com.google.inject.Inject
-import com.google.inject.Singleton
-import com.gaastats.R
-import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DialogFragment
-import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.os.Bundle
-import com.gaastats.util.ResourceHelper
 import android.widget.EditText
-import android.view.View
+import com.gaastats.R
+import com.gaastats.activity.events.CompetitionSetupDialogHandler
 
-@Singleton
-class CompetitionSetupDialogFragment extends BaseSetupDialogFragment {
-  @Inject
-  var competitionSetupDialogHandler: CompetitionSetupDialogHandler = null
+object CompetitionSetupDialogFragment extends BaseSetupDialogFragment {
 
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     val dialogView = getActivity().getLayoutInflater.inflate(R.layout.competition_setup, null)
@@ -27,7 +16,7 @@ class CompetitionSetupDialogFragment extends BaseSetupDialogFragment {
       val numberOfPlayersInput = dialogView.findViewById(R.id.numberOfPlayersInput).asInstanceOf[EditText]
       val numberOfSubsInput = dialogView.findViewById(R.id.numberOfSubsInput).asInstanceOf[EditText]
       val lengthOfHalfInput = dialogView.findViewById(R.id.lengthOfHalfInput).asInstanceOf[EditText]
-      competitionSetupDialogHandler.retrieveValuesAndSave(competitionNameInput, numberOfPlayersInput, numberOfSubsInput, lengthOfHalfInput)
+      CompetitionSetupDialogHandler.retrieveValuesAndSave(competitionNameInput, numberOfPlayersInput, numberOfSubsInput, lengthOfHalfInput)
     })
   }
 

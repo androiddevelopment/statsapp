@@ -1,22 +1,16 @@
 package com.gaastats.activity
 
-import roboguice.activity.RoboFragmentActivity
+import android.app.Activity
 import android.os.Bundle
-import com.gaastats.R
-import com.gaastats.util.ResourceHelper
-import com.google.inject.Inject
-import com.gaastats.domain.enums.TeamType
 import android.widget.TextView
-import com.gaastats.dao.helper.StatisticHelper
-import com.gaastats.activity.service.MatchStatsService
+import com.gaastats.R
 import com.gaastats.activity.events.MatchButtonOnClickListener
-import com.gaastats.domain.Match
-import com.gaastats.domain.enums.MatchStageEnum
-import com.gaastats.activity.service.MatchTimerService
+import com.gaastats.activity.service.{MatchStatsService, MatchStatsViewsService, MatchTimerService}
 import com.gaastats.dao.MatchDao
-import com.gaastats.dao.helper.DatabaseHelper
-import com.gaastats.dao.helper.DatabaseUtilsWrapper
-import android.util.Log
+import com.gaastats.dao.helper.StatisticHelper
+import com.gaastats.domain.Match
+import com.gaastats.domain.enums.TeamType
+import com.gaastats.ui.helper.DialogFragmentHelper
 
 object MatchCentreActivity {
     def GoalDialog = "goalDialog"
@@ -25,73 +19,44 @@ object MatchCentreActivity {
     def matchStatisticViews = List(R.id.goalButton, R.id.pointButton, R.id.missButton, R.id.cardButton, R.id.kickoutButton)
 }
 
-class MatchCentreActivity extends RoboFragmentActivity {
-    @Inject
-    var matchDao: MatchDao = null
-    @Inject
-    var resourceHelper: ResourceHelper = null
-    @Inject
-    var matchStatsService: MatchStatsService = null
-    @Inject
-    var matchTimerService: MatchTimerService = null
-    @Inject
-    var matchButtonOnClickListener: MatchButtonOnClickListener = null
-    @Inject
-    var databaseUtilsWrapper: DatabaseUtilsWrapper = null
-    @Inject
-    var statisticHelper: StatisticHelper = null
+class MatchCentreActivity extends Activity {
     var matchID: Int = 0
     var matchInProgress: Match = null
 
+
     override def onCreate(savedInstanceState: Bundle) {
         super.onCreate(savedInstanceState)
+        DialogFragmentHelper.fragmentManager = getFragmentManager
         setContentView(R.layout.match_centre)
-        for (buttonID <- Array(R.id.pauseOrResumeTimer, R.id.halfOrFullTime, R.id.undoLast)) findViewById(buttonID).setOnClickListener(matchButtonOnClickListener)
+        for (buttonID <- Array(R.id.pauseOrResumeTimer, R.id.halfOrFullTime, R.id.undoLast)) findViewById(buttonID).setOnClickListener(MatchButtonOnClickListener)
         setOnClickListenersForStatisticButtons(MatchCentreActivity.matchStatisticViews)
         matchID = getIntent().getSerializableExtra("matchID").asInstanceOf[Int]
+
     }
 
     override def onStart {
         super.onStart
         if (matchInProgress == null) {
-            matchInProgress = matchDao.retrieveMatchByID(matchID)
-            matchStatsService.matchInProgress = matchInProgress
-            matchTimerService.setMatchInProgress(matchInProgress)
+            matchInProgress = MatchDao.retrieveMatchByID(matchID)
+            MatchStatsService.matchInProgress = matchInProgress
+            MatchTimerService.matchInProgress = matchInProgress
         }
         setTitleTextViews
-        statisticHelper.saveStatistics
+        StatisticHelper.saveStatistics
+        MatchStatsViewsService.activity = this
+        MatchTimerService.activity = this
     }
 
     override def onResume {
         super.onResume
-        resourceHelper.setActivity(this)
-        matchTimerService.initializeViews
-        TeamType forAllTeamTypes refreshTeamStatisticViews
+        MatchTimerService.initializeViews
+        TeamType forAllTeamTypes MatchStatsViewsService.refreshTeamStatisticViews
     }
 
     override def onDestroy {
       super.onDestroy
-      matchTimerService.pauseResumeMatch
-      matchDao.save(matchInProgress)
-
-    }
-
-    def refreshTeamStatisticViews(teamType: TeamType) {
-        updateStatisticTextView(teamType, "Goal")
-        updateStatisticTextView(teamType, "Point")
-        updateStatisticTextView(teamType, "Miss")
-        updateStatisticTextView(teamType, "Kickout")
-        updateStatisticTextView(teamType, "Yellow Card")
-        updateStatisticTextView(teamType, "Red Card")
-        updateStatisticTextView(teamType, "Black Card")
-    }
-
-    def updateStatisticTextView(teamType: TeamType, statisticName: String) {
-        var teamScoreLayout = teamType.layoutID
-        val teamScoreLayoutView = findViewById(teamScoreLayout)
-        val statisticViewID = StatisticHelper.getStatisticView(statisticName)
-        var statisticTextView = teamScoreLayoutView.findViewById(statisticViewID).asInstanceOf[TextView]
-        statisticTextView.setText(matchStatsService.retrieveStatisticSum(statisticName, teamType).toString)
+      MatchTimerService.pauseResumeMatch
+      MatchDao.save(matchInProgress)
     }
 
     private def setTitleTextViews {
@@ -101,7 +66,7 @@ class MatchCentreActivity extends RoboFragmentActivity {
     }
 
     private def setOnClickListenersForStatisticButtons(buttonIDsList: List[Int]) {
-        buttonIDsList.foreach(buttonID => findViewById(R.id.statisticsButtons).findViewById(buttonID).setOnClickListener(matchButtonOnClickListener))
+        buttonIDsList.foreach(buttonID => findViewById(R.id.statisticsButtons).findViewById(buttonID).setOnClickListener(MatchButtonOnClickListener))
     }
 
     private def setTextForTeam(teamType: TeamType) {

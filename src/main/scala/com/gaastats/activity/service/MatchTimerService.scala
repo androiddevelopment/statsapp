@@ -1,33 +1,18 @@
 package com.gaastats.activity.service
 
-import com.gaastats.R
-import com.gaastats.domain.Match
-import com.gaastats.domain.enums.MatchStageEnum
-import com.gaastats.domain.enums.TimerStatus
-import com.gaastats.util.ResourceHelper
-import com.google.inject.Inject
-import com.google.inject.Singleton
-import com.j256.ormlite.table.DatabaseTable
-import android.view.View
+import android.app.Activity
 import android.widget.TextView
-import java.text.DecimalFormat
-import com.gaastats.dao.CompetitionDao
-import com.gaastats.util.Format
+import com.gaastats.R
 import com.gaastats.activity.MatchCentreActivity
-import com.gaastats.domain.enums.TeamType
+import com.gaastats.dao.CompetitionDao
+import com.gaastats.domain.Match
+import com.gaastats.domain.enums.{MatchStageEnum, TeamType, TimerStatus}
+import com.gaastats.util.{Format, ResourceHelper}
 
-@Singleton
-class MatchTimerService {
+object MatchTimerService {
     var matchInProgress: Match = null
     var matchTimer: MatchTimer = null
-    @Inject
-    var resourceHelper: ResourceHelper = null
-    @Inject
-    var competitionDao: CompetitionDao = null
-
-    def setMatchInProgress(matchInProgress: Match) {
-        this.matchInProgress = matchInProgress
-    }
+    var activity: Activity = null
 
     def initializeViews {
         updateTimerViewWithMatchTime
@@ -66,7 +51,7 @@ class MatchTimerService {
     }
 
     private def updateTimerViewWithMatchTime() {
-        val timerView = resourceHelper.findViewById(R.id.timer).asInstanceOf[TextView]
+        val timerView = activity.findViewById(R.id.timer).asInstanceOf[TextView]
         if (timerView != null) {
           timerView.setText(Format.formatInteger(matchInProgress.minutesElapsed) + ":" + Format.formatInteger(matchInProgress.secondsElapsed))
         }
@@ -80,19 +65,19 @@ class MatchTimerService {
     }
 
     private def updateHalfOrFullTimeTextView {
-        var halfOrFullTime = resourceHelper.findViewById(R.id.halfOrFullTime).asInstanceOf[TextView]
+        var halfOrFullTime = activity.findViewById(R.id.halfOrFullTime).asInstanceOf[TextView]
         halfOrFullTime.setText(matchInProgress.stage.halfOrFullTimeButtonText)
         halfOrFullTime.setVisibility(matchInProgress.stage.halfOrFullTimeButtonVisibility)
     }
 
     private def updateViewsVisibility {
-        var pauseOrResumeTimer = resourceHelper.findViewById(R.id.pauseOrResumeTimer).asInstanceOf[TextView]
+        var pauseOrResumeTimer = activity.findViewById(R.id.pauseOrResumeTimer).asInstanceOf[TextView]
         if(pauseOrResumeTimer != null) {
           pauseOrResumeTimer.setText(matchInProgress.timerStatus.toString)
           pauseOrResumeTimer.setVisibility(matchInProgress.stage.viewVisibility)
           TeamType.forAllTeamTypes { teamType =>
             MatchCentreActivity.matchStatisticViews.foreach(statisticView =>
-              resourceHelper.findViewById(R.id.statisticsButtons)
+              activity.findViewById(R.id.statisticsButtons)
                 .findViewById(statisticView)
                 .setVisibility(matchInProgress.stage.viewVisibility))
           }
@@ -100,7 +85,7 @@ class MatchTimerService {
     }
 
     private def updateCurrentHalfTextView {
-        var halfOrFullTime = resourceHelper.findViewById(R.id.currentHalf).asInstanceOf[TextView]
+        var halfOrFullTime = activity.findViewById(R.id.currentHalf).asInstanceOf[TextView]
         halfOrFullTime.setText(matchInProgress.stage.currentHalfLabelText)
     }
 
@@ -121,7 +106,7 @@ class MatchTimerService {
     }
 
     private def getLengthOfHalf = {
-        val competition = competitionDao.retrieveByName(matchInProgress.competition.name)
+        val competition = CompetitionDao.retrieveByName(matchInProgress.competition.name)
         competition.lengthOfHalf
     }
 
@@ -130,7 +115,7 @@ class MatchTimerService {
     }
 
     private def newMatchTimer(totalNumberOfMinutes: Int, minutesElapsed: Int, secondsElapsed: Int): MatchTimer = {
-        new MatchTimer(totalNumberOfMinutes * 60, minutesElapsed, secondsElapsed, MatchTimerService.this)
+        new MatchTimer(totalNumberOfMinutes * 60, minutesElapsed, secondsElapsed)
     }
 
     private def updateMatchStageEnum = matchInProgress.stage = matchInProgress.stage.next

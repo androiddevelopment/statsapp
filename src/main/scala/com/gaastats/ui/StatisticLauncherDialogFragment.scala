@@ -1,12 +1,6 @@
 package com.gaastats.ui
 
-import com.gaastats.activity.service.MatchStatsService
-import com.gaastats.dao.StatisticTypeDao
-import com.gaastats.domain.enums.TeamType
-import com.google.inject.Inject
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.DialogFragment
+import android.app.{AlertDialog, Dialog, DialogFragment}
 import android.content.DialogInterface
 import android.os.Bundle
 import com.gaastats.activity.MatchCentreActivity
@@ -14,8 +8,6 @@ import com.gaastats.domain.Match
 import com.gaastats.ui.helper.DialogFragmentHelper
 
 class StatisticLauncherDialogFragment extends DialogFragment {
-    @Inject
-    var dialogFragmentHelper: DialogFragmentHelper = null
     var matchInProgress: Match = null
     var statisticName: String = null
 
@@ -31,7 +23,7 @@ class StatisticLauncherDialogFragment extends DialogFragment {
         builder.setItems(teamNames, new DialogInterface.OnClickListener() {
             def onClick(dialog: DialogInterface, which: Int) {
                 val teamNameSelected = teamNames(which).toString()
-                dialogFragmentHelper.showFragment(new BaseStatisticTypeDialogFragment(statisticName), MatchCentreActivity.StatisticLauncherDialog, matchInProgress.getTeamTypeForTeamName(teamNameSelected).layoutID)
+                DialogFragmentHelper.showFragment(new BaseStatisticTypeDialogFragment(statisticName), MatchCentreActivity.StatisticLauncherDialog, matchInProgress.getTeamTypeForTeamName(teamNameSelected).layoutID)
                 dismiss()
             }
         })
