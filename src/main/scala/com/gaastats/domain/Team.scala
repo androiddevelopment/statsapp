@@ -1,7 +1,5 @@
 package com.gaastats.domain
 
-import org.apache.commons.lang.builder.ToStringBuilder
-
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 

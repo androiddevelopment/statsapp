@@ -27,7 +27,7 @@ class HomeScreenActivity extends Activity {
 
     override def onResume() {
         super.onResume
-        TestDataHelper.saveTestData
+        // TestDataHelper.saveTestData
     }
 
     override def onDestroy() {

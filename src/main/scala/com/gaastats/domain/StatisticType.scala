@@ -1,13 +1,11 @@
 package com.gaastats.domain
 
-import scala.collection.JavaConversions.collectionAsScalaIterable
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+import org.apache.commons.lang.builder.{EqualsBuilder, HashCodeBuilder}
+
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.mutable.ListBuffer
-import org.apache.commons.lang.builder.HashCodeBuilder
-import com.j256.ormlite.field.DatabaseField
-import com.j256.ormlite.field.ForeignCollectionField
-import com.j256.ormlite.table.DatabaseTable
-import org.apache.commons.lang.builder.EqualsBuilder
 
 object StatisticType {
     def apply(name: String, childStatistic: StatisticType): StatisticType = {

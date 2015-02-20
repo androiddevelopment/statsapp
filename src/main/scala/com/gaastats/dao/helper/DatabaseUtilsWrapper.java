@@ -6,7 +6,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 class DatabaseUtilsWrapper {
 
 	public DatabaseHelper getDatabaseHelper(Application application) {
-		return OpenHelperManager.getHelper(application, DatabaseHelper.class);
+		return OpenHelperManager.getHelper(application, com.gaastats.dao.helper.DatabaseHelper.class);
 	}
 	
 	public void releaseHelper() {
