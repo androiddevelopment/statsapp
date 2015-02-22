@@ -11,6 +11,8 @@ abstract class BaseDao[T: ClassManifest] {
 
     def save(objectToSave: T) = getDao().createOrUpdate(objectToSave)
 
+    def delete(objectToDelete: T) = getDao().delete(objectToDelete)
+
     protected def getDao(): Dao[T, String] = {
         DatabaseUtils.getDatabaseHelper.getDao(classManifest[T].erasure)
     }

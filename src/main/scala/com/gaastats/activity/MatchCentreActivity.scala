@@ -11,6 +11,7 @@ import com.gaastats.dao.helper.StatisticHelper
 import com.gaastats.domain.Match
 import com.gaastats.domain.enums.TeamType
 import com.gaastats.ui.helper.DialogFragmentHelper
+import main.scala.com.gaastats.activity.service.MatchViewsService
 
 object MatchCentreActivity {
     def GoalDialog = "goalDialog"
@@ -40,22 +41,23 @@ class MatchCentreActivity extends Activity {
             matchInProgress = MatchDao.retrieveMatchByID(matchID)
             MatchStatsService.matchInProgress = matchInProgress
             MatchTimerService.matchInProgress = matchInProgress
+            MatchViewsService.matchInProgress = matchInProgress
         }
         setTitleTextViews
         StatisticHelper.saveStatistics
         MatchStatsViewsService.activity = this
-        MatchTimerService.activity = this
+        MatchViewsService.activity = this
     }
 
     override def onResume {
         super.onResume
-        MatchTimerService.initializeViews
+        MatchViewsService.initializeViews
         TeamType forAllTeamTypes MatchStatsViewsService.refreshTeamStatisticViews
     }
 
     override def onDestroy {
       super.onDestroy
-      MatchTimerService.pauseResumeMatch
+      MatchTimerService.pauseMatch
       MatchDao.save(matchInProgress)
     }
 
@@ -70,7 +72,7 @@ class MatchCentreActivity extends Activity {
     }
 
     private def setTextForTeam(teamType: TeamType) {
-        var teamNameView = findViewById(teamType.layoutID).findViewById(R.id.teamName).asInstanceOf[TextView]
+        val teamNameView = findViewById(teamType.layoutID).findViewById(R.id.teamName).asInstanceOf[TextView]
         teamNameView.setText(teamType.getTeam(matchInProgress).name)
     }
 

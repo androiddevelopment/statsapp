@@ -1,5 +1,6 @@
 package com.gaastats.activity
 
+import android.app.Activity
 import android.view.View.OnClickListener
 import android.view.{LayoutInflater, View, ViewGroup}
 import android.widget.{BaseAdapter, Button, TextView}
@@ -7,13 +8,12 @@ import com.gaastats.R
 import com.gaastats.activity.service.ActivityStarterService
 import com.gaastats.dao.MatchDao
 import com.gaastats.domain.Match
-import com.gaastats.util.ResourceHelper
+import main.scala.com.gaastats.ui.DeleteMatchDialogFragment
 
 /**
  * Created by David on 2/15/2015.
  */
-object MatchListViewAdapter extends BaseAdapter {
-  var allMatches: List[Match] = MatchDao.retrieveAllMatches()
+class MatchListViewAdapter(var allMatches: List[Match], activity: Activity, view: View) extends BaseAdapter {
 
   override def getCount = {
     allMatches.size
@@ -43,7 +43,7 @@ object MatchListViewAdapter extends BaseAdapter {
     val deleteButton = updatedView.findViewById(R.id.deleteIndividualMatchButton).asInstanceOf[Button]
     deleteButton.setOnClickListener(new OnClickListener {
       override def onClick(v: View) {
-
+        new DeleteMatchDialogFragment(getItem(position), MatchListViewAdapter.this).show(activity.getFragmentManager, "Delete Match")
       }
     })
     updatedView
@@ -51,5 +51,11 @@ object MatchListViewAdapter extends BaseAdapter {
 
   override def getItem(position: Int): Match = {
     allMatches(position)
+  }
+
+  def deleteItem(matchToDelete: Match) {
+    allMatches = allMatches.filterNot(_ == matchToDelete)
+    MatchDao.delete(matchToDelete)
+    this.notifyDataSetChanged()
   }
 }

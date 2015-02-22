@@ -8,18 +8,13 @@ import com.gaastats.dao.CompetitionDao
 import com.gaastats.domain.Match
 import com.gaastats.domain.enums.{MatchStageEnum, TeamType, TimerStatus}
 import com.gaastats.util.{Format, ResourceHelper}
+import main.scala.com.gaastats.activity.service.MatchViewsService
+
+import scala.Option
 
 object MatchTimerService {
     var matchInProgress: Match = null
-    var matchTimer: MatchTimer = null
-    var activity: Activity = null
-
-    def initializeViews {
-        updateTimerViewWithMatchTime
-        updateHalfOrFullTimeTextView
-        updateViewsVisibility
-        updateCurrentHalfTextView
-    }
+    var matchTimer: Option[MatchTimer] = None
 
     def updateMatchStage {
         matchInProgress.stage match {
@@ -29,80 +24,49 @@ object MatchTimerService {
     }
 
     def pauseResumeMatch {
-        if (matchTimer != null) pauseMatch
-        else resumeMatch
+        matchTimer match {
+          case Some(_) => pauseMatch
+          case None => resumeMatch
+        }
     }
 
     protected[service] def endHalf {
         updateMatchStageEnum
-        updateHalfOrFullTimeTextView
-        updateCurrentHalfTextView
+        MatchViewsService.updateHalfButtonAndTextView
         pauseMatch
         updateTimeOnEndOfHalf
     }
 
     protected[service] def updateMatchTime(minutesElapsed: Int, secondsElapsed: Int) {
         matchInProgress.updateMatchTime(minutesElapsed, secondsElapsed)
-        updateTimerViewWithMatchTime
+        MatchViewsService.updateTimerViewWithMatchTime
     }
 
     private def updateTimeOnEndOfHalf {
         updateMatchTime(matchInProgress.stage.product * getLengthOfHalf, 0)
     }
 
-    private def updateTimerViewWithMatchTime() {
-        val timerView = activity.findViewById(R.id.timer).asInstanceOf[TextView]
-        if (timerView != null) {
-          timerView.setText(Format.formatInteger(matchInProgress.minutesElapsed) + ":" + Format.formatInteger(matchInProgress.secondsElapsed))
-        }
-    }
-
     private def startHalf {
         updateMatchStageEnum
-        updateHalfOrFullTimeTextView
-        updateCurrentHalfTextView
+        MatchViewsService.updateHalfButtonAndTextView
         resumeMatch
     }
 
-    private def updateHalfOrFullTimeTextView {
-        var halfOrFullTime = activity.findViewById(R.id.halfOrFullTime).asInstanceOf[TextView]
-        halfOrFullTime.setText(matchInProgress.stage.halfOrFullTimeButtonText)
-        halfOrFullTime.setVisibility(matchInProgress.stage.halfOrFullTimeButtonVisibility)
-    }
-
-    private def updateViewsVisibility {
-        var pauseOrResumeTimer = activity.findViewById(R.id.pauseOrResumeTimer).asInstanceOf[TextView]
-        if(pauseOrResumeTimer != null) {
-          pauseOrResumeTimer.setText(matchInProgress.timerStatus.toString)
-          pauseOrResumeTimer.setVisibility(matchInProgress.stage.viewVisibility)
-          TeamType.forAllTeamTypes { teamType =>
-            MatchCentreActivity.matchStatisticViews.foreach(statisticView =>
-              activity.findViewById(R.id.statisticsButtons)
-                .findViewById(statisticView)
-                .setVisibility(matchInProgress.stage.viewVisibility))
-          }
+    def pauseMatch {
+        matchTimer match {
+          case Some(_) => matchTimer.get.cancel
+          case None =>
         }
-    }
-
-    private def updateCurrentHalfTextView {
-        var halfOrFullTime = activity.findViewById(R.id.currentHalf).asInstanceOf[TextView]
-        halfOrFullTime.setText(matchInProgress.stage.currentHalfLabelText)
-    }
-
-    private def pauseMatch {
-        if (matchTimer != null) {
-            matchTimer.cancel()
-        }
-        matchTimer = null
+        matchTimer = None
         updateTimerStatus
-        updateViewsVisibility
+        MatchViewsService.updateViewsVisibility
     }
 
     private def resumeMatch {
-        matchTimer = newMatchTimer(getLengthOfHalf, matchInProgress.minutesElapsed, matchInProgress.secondsElapsed)
-        matchTimer.start()
+        matchTimer = Option(newMatchTimer(getLengthOfHalf, matchInProgress.minutesElapsed, matchInProgress.secondsElapsed))
+        matchTimer.get.start
         updateTimerStatus
-        updateViewsVisibility
+        MatchViewsService.updateViewsVisibility
     }
 
     private def getLengthOfHalf = {

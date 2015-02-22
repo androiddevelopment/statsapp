@@ -72,6 +72,10 @@ class Match extends Serializable{
           case _ => TeamType.Away
         }
     }
-    
+
+    def isFinished = {
+
+    }
+
     override def toString = ToStringBuilder.reflectionToString(this)
 }
