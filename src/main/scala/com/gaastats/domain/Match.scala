@@ -37,6 +37,7 @@ class Match extends Serializable{
     @DatabaseField private var timeElapsed: Date = null
     @DatabaseField var dateOfMatch: Date = new Date
     @DatabaseField(generatedId = true) var id: Int = 0
+
     var stage: MatchStageEnum = MatchStageEnum.MatchNotStarted
     var timerStatus: TimerStatus.Status = TimerStatus.Paused
     
@@ -71,10 +72,6 @@ class Match extends Serializable{
           case HomeTeam => TeamType.Home
           case _ => TeamType.Away
         }
-    }
-
-    def isFinished = {
-
     }
 
     override def toString = ToStringBuilder.reflectionToString(this)
