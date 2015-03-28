@@ -6,7 +6,7 @@ android.Plugin.androidBuild
 
 name := "gaastats"
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.11.4"
 
 //proguardCache in Android ++= Seq(
 //  ProguardCache("org.scaloid") % "org.scaloid"
