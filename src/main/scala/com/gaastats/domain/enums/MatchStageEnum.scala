@@ -10,5 +10,16 @@ object MatchStageEnum {
 	case object HalfTime extends MatchStageEnum(2, "Start Second Half", "Half Time", SecondHalfInProgress, 1, View.INVISIBLE, View.VISIBLE)
 	case object SecondHalfInProgress extends MatchStageEnum(3, "Full Time", "Second Half", FullTime, 0, View.VISIBLE, View.VISIBLE)
 	case object FullTime extends MatchStageEnum(4, null, "Full Time", null, 2, View.INVISIBLE, View.INVISIBLE)
+
+  def get(stageValue: Int) = {
+    stageValue match {
+      case 0 => MatchNotStarted
+      case 1 => FirstHalfInProgress
+      case 2 => HalfTime
+      case 3 => SecondHalfInProgress
+      case 4 => FullTime
+      case _ => throw new IllegalArgumentException("Invalid match stage ID specified")
+    }
+  }
 }
 

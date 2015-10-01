@@ -17,7 +17,7 @@ object MatchTimerService {
     var matchTimer: Option[MatchTimer] = None
 
     def updateMatchStage {
-        matchInProgress.stage match {
+        matchInProgress.getStage match {
             case MatchStageEnum.MatchNotStarted | MatchStageEnum.HalfTime => startHalf
             case MatchStageEnum.FirstHalfInProgress | MatchStageEnum.SecondHalfInProgress => endHalf
         }
@@ -31,7 +31,7 @@ object MatchTimerService {
     }
 
     protected[service] def endHalf {
-        updateMatchStageEnum
+        matchInProgress.nextStage
         MatchViewsService.updateHalfButtonAndTextView
         pauseMatch
         updateTimeOnEndOfHalf
@@ -43,11 +43,11 @@ object MatchTimerService {
     }
 
     private def updateTimeOnEndOfHalf {
-        updateMatchTime(matchInProgress.stage.product * getLengthOfHalf, 0)
+        updateMatchTime(matchInProgress.getStage.product * getLengthOfHalf, 0)
     }
 
     private def startHalf {
-        updateMatchStageEnum
+        matchInProgress.nextStage
         MatchViewsService.updateHalfButtonAndTextView
         resumeMatch
     }
@@ -82,5 +82,4 @@ object MatchTimerService {
         new MatchTimer(totalNumberOfMinutes * 60, minutesElapsed, secondsElapsed)
     }
 
-    private def updateMatchStageEnum = matchInProgress.stage = matchInProgress.stage.next
 }

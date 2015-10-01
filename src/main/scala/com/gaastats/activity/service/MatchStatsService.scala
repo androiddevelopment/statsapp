@@ -13,7 +13,7 @@ object MatchStatsService {
     var undoStack: Stack[Statistic] = Stack()
 
     def createNewStatistic(statisticType: StatisticType, teamType: TeamType) {
-        var statistic = Statistic(matchInProgress, teamType.getTeam(matchInProgress), matchInProgress.matchTime, statisticType)
+        val statistic = Statistic(matchInProgress, teamType.getTeam(matchInProgress), matchInProgress.matchTime, statisticType)
         undoStack.push(statistic)
         saveAndUpdateViews(statistic)(teamType)
     }

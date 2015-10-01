@@ -29,27 +29,27 @@ object MatchViewsService {
 
   private def updateHalfOrFullTimeTextView {
     val halfOrFullTime = activity.findViewById(R.id.halfOrFullTime).asInstanceOf[TextView]
-    halfOrFullTime.setText(matchInProgress.stage.halfOrFullTimeButtonText)
-    halfOrFullTime.setVisibility(matchInProgress.stage.halfOrFullTimeButtonVisibility)
+    halfOrFullTime.setText(matchInProgress.getStage.halfOrFullTimeButtonText)
+    halfOrFullTime.setVisibility(matchInProgress.getStage.halfOrFullTimeButtonVisibility)
   }
 
   def updateViewsVisibility {
     val pauseOrResumeTimer = activity.findViewById(R.id.pauseOrResumeTimer).asInstanceOf[TextView]
     if(pauseOrResumeTimer != null) {
       pauseOrResumeTimer.setText(matchInProgress.timerStatus.toString)
-      pauseOrResumeTimer.setVisibility(matchInProgress.stage.viewVisibility)
+      pauseOrResumeTimer.setVisibility(matchInProgress.getStage.viewVisibility)
       TeamType.forAllTeamTypes { teamType =>
         MatchCentreActivity.matchStatisticViews.foreach(statisticView =>
           activity.findViewById(R.id.statisticsButtons)
             .findViewById(statisticView)
-            .setVisibility(matchInProgress.stage.viewVisibility))
+            .setVisibility(matchInProgress.getStage.viewVisibility))
       }
     }
   }
 
   private def updateCurrentHalfTextView {
     val halfOrFullTime = activity.findViewById(R.id.currentHalf).asInstanceOf[TextView]
-    halfOrFullTime.setText(matchInProgress.stage.currentHalfLabelText)
+    halfOrFullTime.setText(matchInProgress.getStage.currentHalfLabelText)
   }
 
   def updateTimerViewWithMatchTime() {

@@ -18,7 +18,7 @@ object Match {
         newMatch.homeTeam = homeTeam
         newMatch.awayTeam = awayTeam
         newMatch.timeElapsed = startDate
-        newMatch.stage = MatchStageEnum.MatchNotStarted
+        newMatch.stage = MatchStageEnum.MatchNotStarted.matchStageInt
         newMatch.timerStatus = TimerStatus.Paused
         return newMatch
     }
@@ -37,7 +37,7 @@ class Match extends Serializable{
     @DatabaseField private var timeElapsed: Date = null
     @DatabaseField var dateOfMatch: Date = new Date
     @DatabaseField(generatedId = true) var id: Int = 0
-    var stage: MatchStageEnum = MatchStageEnum.MatchNotStarted
+    @DatabaseField private var stage: Int = 0
     var timerStatus: TimerStatus.Status = TimerStatus.Paused
     
     def updateMatchTime(minutesElapsed: Int, secondsElapsed: Int) {
@@ -73,8 +73,12 @@ class Match extends Serializable{
         }
     }
 
-    def isFinished = {
+    def getStage = {
+      MatchStageEnum.get(stage)
+    }
 
+    def nextStage = {
+      stage = MatchStageEnum.get(stage).next.matchStageInt
     }
 
     override def toString = ToStringBuilder.reflectionToString(this)

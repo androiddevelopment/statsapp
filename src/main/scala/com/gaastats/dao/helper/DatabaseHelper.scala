@@ -23,11 +23,11 @@ class DatabaseHelper(context: Context) extends OrmLiteSqliteOpenHelper(context, 
     
     def executeQuery(query: String, arguments: List[String]) = {
         val columnValuesList : ListBuffer[Map[String, Any]] = ListBuffer()
-        var cursor = getReadableDatabase.rawQuery(query, arguments.toArray)
+        val cursor = getReadableDatabase.rawQuery(query, arguments.toArray)
         while (cursor.moveToNext) {      
             val columnValues = scala.collection.mutable.Map[String, Any]()        
             for(i <- 0 to cursor.getColumnNames().length - 1) {
-                var column = cursor.getColumnName(i)
+                val column = cursor.getColumnName(i)
                 columnValues(column) = cursor.getString(i)
             }
             columnValuesList += columnValues.toMap
