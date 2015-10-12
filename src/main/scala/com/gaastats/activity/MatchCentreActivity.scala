@@ -12,6 +12,7 @@ import com.gaastats.domain.Match
 import com.gaastats.domain.enums.TeamType
 import com.gaastats.ui.helper.DialogFragmentHelper
 import main.scala.com.gaastats.activity.service.MatchViewsService
+import org.scaloid.common.SActivity
 
 object MatchCentreActivity {
     def GoalDialog = "goalDialog"
@@ -20,7 +21,7 @@ object MatchCentreActivity {
     def matchStatisticViews = List(R.id.goalButton, R.id.pointButton, R.id.missButton, R.id.cardButton, R.id.kickoutButton)
 }
 
-class MatchCentreActivity extends Activity {
+class MatchCentreActivity extends SActivity {
     var matchID: Int = 0
     var matchInProgress: Match = null
 
@@ -63,7 +64,7 @@ class MatchCentreActivity extends Activity {
 
     private def setTitleTextViews {
         val matchCentreTitle = matchInProgress.competition.name + ": " + matchInProgress.homeTeam.name + " v " + matchInProgress.awayTeam.name
-        findViewById(R.id.matchCentreTitle).asInstanceOf[TextView].setText(matchCentreTitle)
+        find[TextView](R.id.matchCentreTitle).setText(matchCentreTitle)
         TeamType.forAllTeamTypes(setTextForTeam)
     }
 

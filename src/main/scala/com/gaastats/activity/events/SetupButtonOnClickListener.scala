@@ -7,7 +7,6 @@ import com.gaastats.R
 import com.gaastats.activity.HomeScreenActivity
 import com.gaastats.activity.service.ActivityStarterService
 import com.gaastats.ui.{CompetitionSetupDialogFragment, MatchSetupDialogFragment, TeamSetupDialogFragment}
-import com.gaastats.util.ResourceHelper
 
 object SetupButtonOnClickListener extends OnClickListener {
   var activity: Activity = null

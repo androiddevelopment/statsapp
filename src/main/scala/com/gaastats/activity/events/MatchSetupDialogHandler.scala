@@ -1,11 +1,9 @@
 package com.gaastats.activity.events
 
 import android.widget.Spinner
-import com.gaastats.activity.HomeScreenActivity
 import com.gaastats.activity.service.ActivityStarterService
 import com.gaastats.dao.{CompetitionDao, MatchDao, TeamDao}
 import com.gaastats.domain.Match
-import com.gaastats.util.ResourceHelper
 
 object MatchSetupDialogHandler {
 
