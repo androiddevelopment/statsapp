@@ -31,7 +31,7 @@ object MatchTimerService {
     }
 
     protected[service] def endHalf {
-        matchInProgress.nextStage
+        updateMatchStageEnum
         MatchViewsService.updateHalfButtonAndTextView
         pauseMatch
         updateTimeOnEndOfHalf
@@ -82,4 +82,5 @@ object MatchTimerService {
         new MatchTimer(totalNumberOfMinutes * 60, minutesElapsed, secondsElapsed)
     }
 
+    private def updateMatchStageEnum = matchInProgress.nextStage
 }
